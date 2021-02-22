@@ -1,5 +1,7 @@
 *.swp
 *.swo
+static/plots/
+static/plots/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
