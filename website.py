@@ -15,7 +15,7 @@ locally, can either run this file (b/c of the app.run call in main), or:
 
 import os
 from flask import Flask, render_template, redirect, url_for
-from data import now, generate_plot
+from data import now, generate_plot, download_data
 
 
 app = Flask(__name__)
@@ -35,15 +35,22 @@ def get_plot_path(filename, plot_dir='plots'):
     url = url_for('static', filename=plot_path)
     return file_path, url
 
+def get_data_path(filename, data_dir='data'):
+    data_path = os.path.join(data_dir, filename)
+    return data_path
+
 @app.route('/')
 def home_page():
     return f'Click <a href="{url_for("covid_page")}">here</a> to go to data page.'
 
 @app.route('/data/')
 def covid_page():
+    data_path = get_data_path('excess_mortality.csv')
+    download_data(data_path)
+
     img_path, img_url = get_plot_path('plot0.png')
-    img_w, img_h = 800, 400
-    generate_plot(img_path, width=img_w, height=img_h)
+    img_w, img_h = 1700, 400
+    generate_plot(img_path, data_path, width=img_w, height=img_h)
 
     return render_template('data_display_page.html',
             home_link=url_for('home_page'),
