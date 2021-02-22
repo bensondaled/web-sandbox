@@ -17,7 +17,23 @@ import os
 from flask import Flask, render_template, redirect, url_for
 from data import now, generate_plot
 
+
 app = Flask(__name__)
+
+def get_plot_path(filename, plot_dir='plots'):
+    """Generate paths from file name
+
+    Plot files located like: static/plots/image.png
+    
+    Returns:
+     * file_path : relative on disk, like "static/plots/x.png"
+     * url : url in flask, like "/static/plots/x.png"
+
+    """
+    plot_path = os.path.join(plot_dir, filename)
+    file_path = os.path.join(app.static_folder, plot_path)
+    url = url_for('static', filename=plot_path)
+    return file_path, url
 
 @app.route('/')
 def home_page():
@@ -25,14 +41,13 @@ def home_page():
 
 @app.route('/data/')
 def covid_page():
-    plot_path = url_for('static', filename='plot0.png')
-    generate_plot(plot_path)
-    full_plot_path = plot_path
+    img_path, img_url = get_plot_path('plot0.png')
+    generate_plot(img_path)
 
     return render_template('data_display_page.html',
             home_link=url_for('home_page'),
             date_generated=now(),
-            img_path=full_plot_path,
+            img_url=img_url,
             )
 
 if __name__ == '__main__':

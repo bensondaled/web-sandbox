@@ -10,5 +10,5 @@ def now():
 
 def generate_plot(filepath):
     fig, ax = pl.subplots()
-    ax.plot([1, 3, 2])
+    ax.plot(np.random.randint(100, size=100))
     fig.savefig(filepath)
