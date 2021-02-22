@@ -42,12 +42,15 @@ def home_page():
 @app.route('/data/')
 def covid_page():
     img_path, img_url = get_plot_path('plot0.png')
-    generate_plot(img_path)
+    img_w, img_h = 800, 400
+    generate_plot(img_path, width=img_w, height=img_h)
 
     return render_template('data_display_page.html',
             home_link=url_for('home_page'),
             date_generated=now(),
             img_url=img_url,
+            img_w=img_w,
+            img_h=img_h,
             )
 
 if __name__ == '__main__':
