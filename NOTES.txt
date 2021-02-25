@@ -1,0 +1,5 @@
+https://medium.com/@rchang/learning-how-to-build-a-web-application-c5499bd15c8f#.bdph6phki
+
+d3
+    https://square.github.io/intro-to-d3/web-standards/
+    zooming: http://jsfiddle.net/henbox/duwyay3y/1/
