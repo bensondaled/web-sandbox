@@ -75,6 +75,7 @@ def generate_plot(filepath, data_path, width=100, height=100, dpi=200):
                 x0 = axs[2].transData.transform([matplotlib.dates.date2num(pd.Timestamp(mo+'-15').to_datetime64()), 0])[0]
                 x0 = fig.transFigure.inverted().transform([x0, 0])[0]
                 _ax = fig.add_axes([x0-w/20, y+h/60, w/10, h/3])
+                _ax.set_zorder(1000)
                 insets[mo] = _ax
             iax = insets[mo]
             iax.bar(idx, val, color=col)

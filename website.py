@@ -37,7 +37,8 @@ def get_plot_path(filename, plot_dir='plots'):
 
 def get_data_path(filename, data_dir='data'):
     data_path = os.path.join(data_dir, filename)
-    return data_path
+    file_path = os.path.join(app.static_folder, data_path)
+    return file_path
 
 @app.route('/')
 def home_page():
@@ -49,7 +50,7 @@ def covid_page():
     download_data(data_path)
 
     img_path, img_url = get_plot_path('plot0.png')
-    img_w, img_h = 1700, 400
+    img_w, img_h = 1400, 400
     generate_plot(img_path, data_path, width=img_w, height=img_h)
 
     return render_template('data_display_page.html',
