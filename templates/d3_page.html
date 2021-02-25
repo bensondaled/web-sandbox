@@ -11,47 +11,26 @@
 
 <!-- Create a div where the graph will take place -->
 <div id="div0"></div>
-<div id="div1"></div>
+<button class="data">load data</button>
+<button class="r">change r</button>
 
 <script lang="javascript">
-//    // create new chart using Chart constructor
-//    const chart = new Chart({
-//        element: document.querySelector('#div1'),
-//        data: [
-//            [new Date(2016,0,1), 10],
-//            [new Date(2016,1,1), 70],
-//            [new Date(2016,2,1), 30],
-//            [new Date(2016,3,1), 10],
-//            [new Date(2016,4,1), 40]
-//        ]
-//    });
-//    // change line colour on click
-//    d3.selectAll('button.color').on('click', function(){
-//        const color = d3.select(this).text().split(' ')[0];
-//        chart.setColor( color );
-//    });
-//    // change data on click to something randomly-generated
-//    d3.selectAll('button.data').on('click', () => {
-//        chart.setData([
-//            [new Date(2016,0,1), Math.random()*100],
-//            [new Date(2016,1,1), Math.random()*100],
-//            [new Date(2016,2,1), Math.random()*100],
-//            [new Date(2016,3,1), Math.random()*100],
-//            [new Date(2016,4,1), Math.random()*100]
-//        ]);
-//    });
-//    // redraw chart on each resize
-//    // in a real-world example, it might be worth ‘throttling’ this
-//    // more info: http://sampsonblog.com/749/simple-throttle-function
-//    d3.select(window).on('resize', () => chart.draw() );
-</script>
 
-<script lang="javascript">
-    d3.csv("temp_us_data.csv", function(csv_data) {
-        const plot = new Plot({
-            element: document.querySelector('#div0'),
-            data: csv_data
-        });
-    })
+    const plot = new Plot({
+        element: document.querySelector('#div0'),
+        data: null
+    });
+
+    d3.selectAll('button.r').on('click', function(){
+            const r = Math.random()*10;
+            plot.setR(r);
+    });
+
+    d3.csv('temp_us_data.csv', function(csv_data) {
+        d3.selectAll('button.data').on('click', () => {plot.setData(csv_data)});
+    });
+
+
+    d3.select(window).on('resize', () => plot.refresh() );
 
 </script>

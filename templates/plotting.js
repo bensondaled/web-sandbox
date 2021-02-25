@@ -121,12 +121,14 @@ class Plot {
 
         this.xvar = 'deaths_2019_all_ages';
         this.yvar = 'deaths_2020_all_ages';
-
-        // create the chart
-        this.draw();
+        
     }
 
-    draw() {
+    setup() {
+
+        // reset the whole canvas each time you redraw
+        this.element.innerHTML = '';
+
         var w = window,
             d = document,
             e = d.documentElement,
@@ -142,7 +144,6 @@ class Plot {
         this.dims = {width: svg_dims.width - this.margin.left - this.margin.right,
                      height: svg_dims.height - this.margin.top - this.margin.bottom};
 
-        //this.element.innerHTML = '';
         this.svg = d3.select(this.element)
             .append('svg')
             .attr('width', svg_dims.width)
@@ -171,11 +172,6 @@ class Plot {
             .attr("y", "0")
             .attr('width', this.dims.width)
             .attr('height', this.dims.height);
-
-        // create the other stuff
-        this.createScales();
-        this.addAxes();
-        this.drawData();
     }
 
     createScales() {
@@ -231,7 +227,7 @@ class Plot {
         .append("circle")
           .attr("cx", function (d) { return xsc(d[xvar]); } )
           .attr("cy", function (d) { return ysc(d[yvar]); } )
-          .attr("r", 5.5)
+          .attr("r", this.dotR || 5.5)
           .style("fill", "#69b3a2")
         .attr("clip-path", "url(#clip)");
     }
@@ -258,6 +254,29 @@ class Plot {
              .attr("cy", function(d) {
                            return new_y_scale(d[yvar])
                          });
-         }
+     }
+
+    refresh(){
+        this.setup();
+        this.createScales();
+        this.addAxes();
+        this.drawData();
+
+    }
+
+    setData(newData) {
+        this.data = newData;
+
+        this.refresh();
+        
+    }
+
+    setR(r) {
+          
+        this.scatter.attr('r', r)
+        
+        // store for use when redrawing
+        this.dotR = r;
+    }
 
 }
