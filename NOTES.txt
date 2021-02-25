@@ -3,3 +3,4 @@ https://medium.com/@rchang/learning-how-to-build-a-web-application-c5499bd15c8f#
 d3
     https://square.github.io/intro-to-d3/web-standards/
     zooming: http://jsfiddle.net/henbox/duwyay3y/1/
+    classes: http://bl.ocks.org/ejb/774b87bf0f7482599419d1e7da9ed918
