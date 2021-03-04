@@ -1,0 +1,24 @@
+<!doctype html>
+
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="{{ url_for('static', filename='js/plotting.js') }}"></script>
+
+{% for plot_name in plot_names %}
+    <div id="div_{{plot_name}}">{{plot_name}} plot here</div>
+{% endfor %}
+
+<script lang="javascript">
+    tmp = '2016'
+
+    const plot = new Plot({
+        element: document.querySelector(`#div_${tmp}`),
+        data: null,
+        xvar: `${tmp}`,
+        yvar: `${tmp}`
+    });
+
+    d3.csv('{{data_url}}', function(csv_data) {
+        plot.setData(csv_data);
+    });
+
+</script>

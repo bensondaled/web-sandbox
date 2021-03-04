@@ -6,6 +6,8 @@ class Chart {
         this.element = opts.element;
         // create the chart
         this.draw();
+        
+        d3.select(window).on('resize', () => this.refresh() );
     }
     
     draw() {
@@ -25,7 +27,6 @@ class Chart {
         svg.attr('width',  this.width);
         svg.attr('height', this.height);
 
-        // we'll actually be appending to a <g> element
         this.plot = svg.append('g')
             .attr('transform',`translate(${this.margin.left},${this.margin.top})`);
 
@@ -40,13 +41,13 @@ class Chart {
         const m = this.margin;
         
         // calculate max and min for data
-        const xExtent = d3.extent(this.data, d => d[0]);
-        const yExtent = d3.extent(this.data, d => d[1]);
+        const xExtent = d3.extent(this.data, d => d[this.xvar]);
+        const yExtent = d3.extent(this.data, d => d[this.yvar]);
 
         // force zero baseline if all data points are positive
-        if (yExtent[0] > 0) { yExtent[0] = 0; };
+        //if (yExtent[0] > 0) { yExtent[0] = 0; };
 
-        this.xScale = d3.scaleTime()
+        this.xScale = d3.scaleLinear()
             .range([0, this.width-m.right])
             .domain(xExtent);
 
@@ -119,8 +120,8 @@ class Plot {
         this.data = opts.data;
         this.element = opts.element;
 
-        this.xvar = 'deaths_2019_all_ages';
-        this.yvar = 'deaths_2020_all_ages';
+        this.xvar = opts.xvar;
+        this.yvar = opts.yvar;
         
     }
 

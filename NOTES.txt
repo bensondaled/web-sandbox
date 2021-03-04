@@ -1,6 +1,18 @@
-https://medium.com/@rchang/learning-how-to-build-a-web-application-c5499bd15c8f#.bdph6phki
+todo next
+    good progress but can't seem to properly console.log from the plot class which is annoying
+    use d3 to draw the plots based on the processed data
+    allow country selection within d3
 
+page
+    http://bendeverett.pythonanywhere.com/
+web apps
+    https://medium.com/@rchang/learning-how-to-build-a-web-application-c5499bd15c8f#.bdph6phki
 d3
     https://square.github.io/intro-to-d3/web-standards/
     zooming: http://jsfiddle.net/henbox/duwyay3y/1/
     classes: http://bl.ocks.org/ejb/774b87bf0f7482599419d1e7da9ed918
+flask
+    https://flask.palletsprojects.com/en/1.1.x/quickstart/
+jinja
+    https://codeburst.io/jinja-2-explained-in-5-minutes-88548486834e
+    https://jinja.palletsprojects.com/en/2.11.x/templates/
