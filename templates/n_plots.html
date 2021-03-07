@@ -13,12 +13,13 @@
     const plot = new Plot({
         element: document.querySelector(`#div_${tmp}`),
         data: null,
-        xvar: `${tmp}`,
+        xvar: `date`,
         yvar: `${tmp}`
     });
 
     d3.csv('{{data_url}}', function(csv_data) {
         plot.setData(csv_data);
     });
+
 
 </script>

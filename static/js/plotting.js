@@ -1,119 +1,3 @@
-class Chart {
-    
-    constructor(opts) {
-        // load in arguments from config object
-        this.data = opts.data;
-        this.element = opts.element;
-        // create the chart
-        this.draw();
-        
-        d3.select(window).on('resize', () => this.refresh() );
-    }
-    
-    draw() {
-        // define width, height and margin
-        this.width = this.element.offsetWidth;
-        this.height = this.width / 2;
-        this.margin = {
-            top: 20,
-            right: 75,
-            bottom: 45,
-            left: 50
-        };
-
-        // set up parent element and SVG
-        this.element.innerHTML = '';
-        const svg = d3.select(this.element).append('svg');
-        svg.attr('width',  this.width);
-        svg.attr('height', this.height);
-
-        this.plot = svg.append('g')
-            .attr('transform',`translate(${this.margin.left},${this.margin.top})`);
-
-        // create the other stuff
-        this.createScales();
-        this.addAxes();
-        this.addLine();
-    }
-    
-    createScales() {
-        // shorthand to save typing later
-        const m = this.margin;
-        
-        // calculate max and min for data
-        const xExtent = d3.extent(this.data, d => d[this.xvar]);
-        const yExtent = d3.extent(this.data, d => d[this.yvar]);
-
-        // force zero baseline if all data points are positive
-        //if (yExtent[0] > 0) { yExtent[0] = 0; };
-
-        this.xScale = d3.scaleLinear()
-            .range([0, this.width-m.right])
-            .domain(xExtent);
-
-        this.yScale = d3.scaleLinear()
-            .range([this.height-(m.top+m.bottom), 0])
-            .domain(yExtent);
-    }
-
-    addAxes() {
-        const m = this.margin;
-
-        // create and append axis elements
-        // this is all pretty straightforward D3 stuff
-        const xAxis = d3.axisBottom()
-            .scale(this.xScale)
-            .ticks(d3.timeMonth);
-
-        const yAxis = d3.axisLeft()
-            .scale(this.yScale)
-            .tickFormat(d3.format("d"));
-
-        this.plot.append("g")
-            .attr("class", "x axis")
-            .attr("transform", `translate(0, ${this.height-(m.top+m.bottom)})`)
-            .call(xAxis);
-
-        this.plot.append("g")
-            .attr("class", "y axis")
-            .call(yAxis)
-    }
-    
-    addLine() {
-        const line = d3.line()
-            .x(d => this.xScale(d[0]))
-            .y(d => this.yScale(d[1]));
-
-        this.plot.append('path')
-            // use data stored in `this`
-            .datum(this.data)
-            .classed('line',true)
-            .attr('d',line)
-            // set stroke to specified color, or default to red
-            .style('stroke', this.lineColor || 'red');
-    }
-    
-    // the following are "public methods"
-    // which can be used by code outside of this file
-
-    setColor(newColor) {
-        this.plot.select('.line')
-            .style('stroke', newColor);
-        
-        // store for use when redrawing
-        this.lineColor = newColor;
-    }
-
-    setData(newData) {
-        this.data = newData;
-
-        // full redraw needed
-        this.draw();
-    }
-}
-
-// ------
-
 class Plot {
     
     constructor(opts) {
@@ -122,7 +6,7 @@ class Plot {
 
         this.xvar = opts.xvar;
         this.yvar = opts.yvar;
-        
+
     }
 
     setup() {
@@ -155,7 +39,7 @@ class Plot {
         this.svg.append("rect")
             .attr("width", "100%")
             .attr("height", "100%")
-            .attr("fill", "pink");
+            .attr("fill", 'lightgrey');
 
         this.axes = this.svg.append('g')
             .attr('width', this.dims.width)
@@ -164,7 +48,7 @@ class Plot {
         this.axes.append("rect")
             .attr("width", this.dims.width)
             .attr("height", this.dims.height)
-            .attr("fill", "grey");
+            .attr("fill", 'white');
         var clip = this.axes.append("defs").append("svg:clipPath")
             .attr("id", "clip")
             .append("svg:rect")
@@ -178,13 +62,21 @@ class Plot {
     createScales() {
         
         // calculate max and min for data
-        const xExtent = d3.extent(this.data, d => d[this.xvar]);
-        const yExtent = d3.extent(this.data, d => d[this.yvar]);
+        const xExtent = d3.extent(this.data, d =>
+            this.parseDate(d[this.xvar]));
+        // pad x axis boundary dates
+        xExtent[0].setDate(xExtent[0].getDate()-5);
+        xExtent[1].setDate(xExtent[1].getDate()+5);
 
+        const yExtent = d3.extent(this.data, d => parseInt(d[this.yvar]));
+        // pad y axis values
+        yExtent[0] = yExtent[0] - 1000;
+        yExtent[1] = yExtent[1] + 1000;
+        console.log(yExtent);
         // force zero baseline if all data points are positive
-        if (yExtent[0] > 0) { yExtent[0] = 0; };
+        //if (yExtent[0] > 0) { yExtent[0] = 0; };
 
-        this.x_scale = d3.scaleLinear()
+        this.x_scale = d3.scaleTime()
             .domain(xExtent)
             .range([ 0, this.dims.width ]);
 
@@ -197,7 +89,7 @@ class Plot {
 
       this.xAxis = d3.axisBottom()
             .scale(this.x_scale)
-            .tickFormat(d3.format('d'));
+            .tickFormat(d3.timeFormat("%m-%d"));
 
       this.yAxis = d3.axisLeft()
             .scale(this.y_scale)
@@ -226,10 +118,12 @@ class Plot {
         .data(this.data)
         .enter()
         .append("circle")
-          .attr("cx", function (d) { return xsc(d[xvar]); } )
+          .attr("cx", function (d) 
+              { return xsc(this.parseDate(d[xvar])); }
+              .bind(this))
           .attr("cy", function (d) { return ysc(d[yvar]); } )
           .attr("r", this.dotR || 5.5)
-          .style("fill", "#69b3a2")
+          .style("fill", "black")
         .attr("clip-path", "url(#clip)");
     }
 
@@ -249,9 +143,9 @@ class Plot {
           var xvar = this.xvar;
           var yvar = this.yvar;
           this.scatter
-             .attr("cx", function(d) {
-                           return new_x_scale(d[xvar])
-                         })
+             .attr("cx", function(d)
+                          { return new_x_scale(this.parseDate(d[xvar])); }
+                      .bind(this))
              .attr("cy", function(d) {
                            return new_y_scale(d[yvar])
                          });
@@ -278,6 +172,17 @@ class Plot {
         
         // store for use when redrawing
         this.dotR = r;
+    }
+
+    parseDate(raw) {
+
+        var parts = raw.split('-');
+        var year = parseInt(parts[0], 10);
+        var month = parseInt(parts[1], 10) - 1;
+        var day = parseInt(parts[2], 10);
+        var date = new Date(year, month, day);
+        return date;
+
     }
 
 }

@@ -1,7 +1,9 @@
 """
 locally, can either run this file (b/c of the app.run call in main), or:
->> export FLASK_APP=sandbox.py
->> python -m flask run
+>> FLASK_APP=website.py FLASK_ENV=development flask run
+
+in browser:
+    right click > inspect - click network tab - check "Disable cache"
 """
 
 import os
@@ -29,6 +31,14 @@ def main_page():
             plot_names=['2016','2017','2018'],
             data_url=data_url,
             )
+
+if app.config["DEBUG"]:
+    @app.after_request
+    def after_request(response):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
+        response.headers["Expires"] = 0
+        response.headers["Pragma"] = "no-cache"
+        return response
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)
