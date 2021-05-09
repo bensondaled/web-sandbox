@@ -7,6 +7,10 @@ class Plot {
         this.xvar = opts.xvar;
         this.yvar = opts.yvar;
 
+        this.labelSize = 25;
+        this.svg_margin = {top: 5, bottom: 200, left: 5, right: 50}; // of svg canvas on page
+        this.margin = {top: 100, bottom: 100, left: 100, right: 50}; // of plot within the svg
+
     }
 
     setup() {
@@ -20,20 +24,20 @@ class Plot {
             g = d.getElementsByTagName('body')[0],
             x = w.innerWidth || e.clientWidth || g.clientWidth,
             y = w.innerHeight|| e.clientHeight|| g.clientHeight,
-            //svg_dims = {width: x - svg_margin.left - svg_margin.right,
-            //            height: y - svg_margin.top - svg_margin.bottom},
-            svg_dims = {width: x - 100,
-                        height: y - 100},
-            svg_margin = {top: 5, bottom: 0, left: 5, right: 0};
-        this.margin = {top: 100, bottom: 100, left: 50, right: 50},
-        this.dims = {width: svg_dims.width - this.margin.left - this.margin.right,
-                     height: svg_dims.height - this.margin.top - this.margin.bottom};
+            svg_dims = {width: x - this.svg_margin.right,
+                        height: y - this.svg_margin.bottom};
+        this.dims = {width: svg_dims.width
+                            - this.margin.left
+                            - this.margin.right,
+                     height: svg_dims.height
+                             - this.margin.top
+                             - this.margin.bottom};
 
         this.svg = d3.select(this.element)
             .append('svg')
             .attr('width', svg_dims.width)
             .attr('height', svg_dims.height)
-            .attr("transform", "translate(" + svg_margin.left + "," + svg_margin.top + ")")
+            .attr("transform", "translate(" + this.svg_margin.left + "," + this.svg_margin.top + ")")
             .call(d3.zoom().on('zoom', this.onZoom.bind(this)));
 
         this.svg.append("rect")
@@ -49,6 +53,7 @@ class Plot {
             .attr("width", this.dims.width)
             .attr("height", this.dims.height)
             .attr("fill", 'white');
+
         var clip = this.axes.append("defs").append("svg:clipPath")
             .attr("id", "clip")
             .append("svg:rect")
@@ -72,7 +77,6 @@ class Plot {
         // pad y axis values
         yExtent[0] = yExtent[0] - 1000;
         yExtent[1] = yExtent[1] + 1000;
-        console.log(yExtent);
         // force zero baseline if all data points are positive
         //if (yExtent[0] > 0) { yExtent[0] = 0; };
 
@@ -89,20 +93,23 @@ class Plot {
 
       this.xAxis = d3.axisBottom()
             .scale(this.x_scale)
-            .tickFormat(d3.timeFormat("%m-%d"));
+            .tickFormat(d3.timeFormat("%b"));
 
       this.yAxis = d3.axisLeft()
             .scale(this.y_scale)
-            .tickFormat(d3.format('d'));
+            .tickFormat(d3.format('d'))
+            .ticks(4);
       
       this.x_axis = this.svg.append('g')
           .attr("transform", "translate(" + this.margin.left + "," + (this.dims.height + this.margin.top) + ")")
           //.attr("class", "x axis")
+          .style("font-size", this.labelSize)
           .call(this.xAxis);
 
       this.y_axis = this.svg.append('g')
           .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
           //.attr("class", "y axis")
+          .style("font-size", this.labelSize)
           .call(this.yAxis);
     }
 
@@ -111,6 +118,19 @@ class Plot {
       var ysc = this.y_scale;
       var xvar = this.xvar;
       var yvar = this.yvar;
+       
+     this.line = this.axes.append('g')
+       .append('path')
+        .datum(this.data)
+        .attr("fill", "none")
+        .attr("stroke", "grey")
+        .attr("stroke-width", 4)
+        .attr("d", d3.line()
+               .x(function (d) { return xsc(this.parseDate(d[xvar])); }
+                 .bind(this))
+               .y(function(d) { return ysc(d[yvar]); })
+             )
+         .attr("clip-path", "url(#clip)");
       
       this.scatter = this.axes.append('g')
         .selectAll(".dot")
@@ -124,7 +144,8 @@ class Plot {
           .attr("cy", function (d) { return ysc(d[yvar]); } )
           .attr("r", this.dotR || 5.5)
           .style("fill", "black")
-        .attr("clip-path", "url(#clip)");
+          .attr("clip-path", "url(#clip)");
+
     }
 
     onZoom() {
@@ -149,6 +170,13 @@ class Plot {
              .attr("cy", function(d) {
                            return new_y_scale(d[yvar])
                          });
+
+          this.line
+            .attr("d", d3.line()
+                   .x(function (d) { return new_x_scale(this.parseDate(d[xvar])); }
+                     .bind(this))
+                   .y(function(d) { return new_y_scale(d[yvar]); })
+                 )
      }
 
     refresh(){

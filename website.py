@@ -8,7 +8,6 @@ in browser:
 
 import os
 from flask import Flask, render_template, redirect, url_for
-from data import download_data, process_data
 
 app = Flask(__name__)
 
@@ -18,18 +17,41 @@ def get_data_path(filename, data_dir='data'):
     url = url_for('static', filename=data_path)
     return file_path, url
 
+def get_shared_kw():
+    menu_options={'Home': url_for('main_page'),
+                  'Add new': url_for('add_new_page'),
+                  'Log': url_for('log_page'),
+                  'Plots': url_for('plots_page')}
+                  
+    return dict(menu_options=menu_options)
+
 @app.route('/')
 def main_page():
     
-    raw_data_path, _ = get_data_path('raw_data.csv')
-    download_data(raw_data_path)
+    return render_template('home.html',
+            **get_shared_kw(),
+            )
+
+@app.route('/addnew')
+def add_new_page():
+    return render_template('addnew.html',
+            **get_shared_kw(),
+            )
+
+@app.route('/log')
+def log_page():
+    return render_template('log.html',
+            **get_shared_kw(),
+            )
+
+@app.route('/plots')
+def plots_page():
 
     processed_data_path, data_url = get_data_path('processed_data.csv')
-    process_data(raw_data_path, processed_data_path)
 
-    return render_template('n_plots.html',
-            plot_names=['2016','2017','2018'],
+    return render_template('plots.html',
             data_url=data_url,
+            **get_shared_kw(),
             )
 
 if app.config["DEBUG"]:

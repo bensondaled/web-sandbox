@@ -1,8 +1,3 @@
-todo next
-    good progress but can't seem to properly console.log from the plot class which is annoying
-    use d3 to draw the plots based on the processed data
-    allow country selection within d3
-
 page
     http://bendeverett.pythonanywhere.com/
 web apps

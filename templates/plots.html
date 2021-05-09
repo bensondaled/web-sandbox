@@ -1,0 +1,32 @@
+<!doctype html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="{{ url_for('static', filename='js/plotting.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/util.js') }}"></script>
+</head>
+
+<body>
+    <script lang="javascript">const sidebar = new Sidebar({menu_options: {{menu_options|safe}}});</script>
+
+    <!-- plots -->
+    <div id="div_2016"></div>
+    <script lang="javascript">
+        tmp = '2016'
+
+        const plot = new Plot({
+            element: document.querySelector(`#div_${tmp}`),
+            data: null,
+            xvar: `date`,
+            yvar: `${tmp}`
+        });
+
+        d3.csv('{{data_url}}', function(csv_data) {
+            plot.setData(csv_data);
+        });
+    </script>
+
+
+</body>
