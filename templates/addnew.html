@@ -5,15 +5,38 @@
     <script src="{{ url_for('static', filename='js/util.js') }}"></script>
 </head>
 
-<body>
+<body onload="setday()">
     <script lang="javascript">const sidebar = new Sidebar({menu_options: {{menu_options|safe}}});</script>
+
+    <script lang="javascript">
+        function setday(inc=0) {
+            var d = new Date();
+            d.setDate(d.getDate() + inc);
+            document.getElementById('datepicker').valueAsDate = d;
+        }
+    </script>
     
     <div class="pagetitle"> add new </div>
+    
+   <div class="allcent">
+       <form id="formin" action="{{url_for('add_new')}}" method="POST">
 
-   <div>
-       <form action="{{url_for('add_new')}}" method="POST">
-        <textarea name="textbox1" placeholder="Enter a comment"></textarea>
-        <input type="submit" value="Post comment">
+        <button class="daybuts" type="button" onclick="setday(-1)">yest</button>
+        <button class="daybuts" type="button" onclick="setday(0)">today</button>
+        <button class="daybuts" type="button" onclick="setday(1)">tmrw</button>
+        <input class="formin" type="date" name="date" id="datepicker" value="2021-07-01">
+
+        <!--label for="pid">Patient ID</label-->
+        <input class="formin" type="text" id="pid" name="patient_id" placeholder="patient id ...">
+        
+        <input class="formin" type="text" name="diagnosis" placeholder="diagnosis ...">
+        
+        <input class="formin" type="text" name="procedures" placeholder="procedures ...">
+
+        <textarea class="formin" name="comment" rows=4 placeholder="comment ..."></textarea>
+
+        <input class="formin" type="submit" value="Submit">
+
     </form>
     </div> 
 

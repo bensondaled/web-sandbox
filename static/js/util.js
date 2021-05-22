@@ -40,8 +40,7 @@ class Sidebar {
         menuBut.setAttribute("type", "image");
         var imgUrl = "/static/images/hamburger.png"; //"{{ url_for('static', filename='images/hamburger.png') }}";
         menuBut.setAttribute("src", imgUrl);
-        menuBut.setAttribute("width", "5%");
-        menuBut.setAttribute("height", "5%");
+        menuBut.className = "hamburger";
         menuBut.setAttribute("onclick", "openNav()");
         document.body.appendChild(menuBut);
     }

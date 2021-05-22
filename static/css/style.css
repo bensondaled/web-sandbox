@@ -11,6 +11,39 @@ body {background-color: #e6f7ff;}
    opacity: 0.5;
 }
 
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+}
+
+.allcent{
+    text-align: center;
+}
+
+.formin {
+  align: center;
+  display: block;
+  width: 35%;
+  padding: 6px 6px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+.daybuts {
+  display: inline;
+  align: center;
+  width: 10%;
+  padding: 6px 6px;
+  margin-top: 0;
+  margin-bottom: 2px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+
 
 /* The side navigation menu */
 .sidenav {
@@ -35,6 +68,7 @@ body {background-color: #e6f7ff;}
   color: #818181;
   display: block;
   transition: 0.3s;
+  line-height: 2.0;
 }
 
 /* When you mouse over the navigation links, change their color */
@@ -42,10 +76,17 @@ body {background-color: #e6f7ff;}
   color: #f1f1f1;
 }
 
+.hamburger{
+  width: 20mm;
+  height: 15mm;
+  margin-bottom: 5%;
+}
+
 /* Position and style the close button (top right corner) */
 .sidenav .closebtn {
   position: absolute;
-  top: 0;
+  padding-top: 0;
+  top: -25px;
   right: 25px;
   font-size: 400%;
   margin-left: 50px;

@@ -65,7 +65,7 @@ def add_new_page():
     
 @app.route('/addnew_', methods=['POST'])
 def add_new():
-    data_in = request.form['textbox1']
+    data_in = request.form['patient_id']
     data_in = MyItem(content=data_in)
     db.session.add(data_in)
     db.session.commit()
