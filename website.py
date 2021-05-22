@@ -9,6 +9,8 @@ logging:
     app.logger.info('')
 
 db_pswd = 'L@nDb4T1m3'
+
+on pythonanywhere virtualenv of interest: needed "pip install mysql-connector-python"
 """
 
 import os
@@ -68,7 +70,7 @@ def add_new_page():
         data_in = MyItem(content=data_in)
         db.session.add(data_in)
         db.session.commit()
-        return redirect(url_for('main_page'))
+        return redirect(url_for('log_page'))
 
 @app.route('/log')
 def log_page():
