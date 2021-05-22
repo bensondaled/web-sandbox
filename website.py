@@ -7,12 +7,33 @@ in browser:
     
 logging:
     app.logger.info('')
+
+db_pswd = 'L@nDb4T1m3'
 """
 
 import os
 from flask import Flask, render_template, redirect, url_for, request
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config["DEBUG"] = True
+
+SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+    username="bendeverett",
+    password="L@nDb4T1m3",
+    hostname="bendeverett.mysql.pythonanywhere-services.com",
+    databasename="bendeverett$log",
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db = SQLAlchemy(app)
+
+class MyItem(db.Model):
+    __tablename__ = "log"
+
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(4096))
 
 def get_data_path(filename, data_dir='data'):
     data_path = os.path.join(data_dir, filename)
