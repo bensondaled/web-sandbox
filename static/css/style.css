@@ -23,19 +23,23 @@ button, input, select, textarea {
 .formin {
   align: center;
   display: block;
-  width: 35%;
+  width: 100%;
+  font-size: 110%;
   padding: 6px 6px;
   margin-top: 0;
   margin-bottom: 20px;
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
+  -webkit-appearance: textfield;
+  text-align: center;
 }
 .daybuts {
-  display: inline;
   align: center;
-  width: 10%;
-  padding: 6px 6px;
+  font-size: 100%;
+  font-family: sans-serif;
+  width: 25%;
+  padding: 0px 0px;
   margin-top: 0;
   margin-bottom: 2px;
   margin-left: auto;

@@ -65,6 +65,7 @@ def add_new_page():
     
 @app.route('/addnew_', methods=['POST'])
 def add_new():
+    app.logger.error(request.form)
     data_in = request.form['patient_id']
     data_in = MyItem(content=data_in)
     db.session.add(data_in)

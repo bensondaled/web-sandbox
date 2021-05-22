@@ -19,6 +19,7 @@
     <div class="pagetitle"> add new </div>
     
    <div class="allcent">
+       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
        <form id="formin" action="{{url_for('add_new')}}" method="POST">
 
         <button class="daybuts" type="button" onclick="setday(-1)">yest</button>
@@ -27,7 +28,7 @@
         <input class="formin" type="date" name="date" id="datepicker" value="2021-07-01">
 
         <!--label for="pid">Patient ID</label-->
-        <input class="formin" type="text" id="pid" name="patient_id" placeholder="patient id ...">
+        <input class="formin" type="text" id="patient_id" name="patient_id" placeholder="patient id ...">
         
         <input class="formin" type="text" name="diagnosis" placeholder="diagnosis ...">
         
@@ -38,6 +39,7 @@
         <input class="formin" type="submit" value="Submit">
 
     </form>
+       </meta>
     </div> 
 
 </body>
