@@ -7,7 +7,7 @@ in browser:
 """
 
 import os
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 
 app = Flask(__name__)
 
@@ -32,11 +32,16 @@ def main_page():
             **get_shared_kw(),
             )
 
-@app.route('/addnew')
+@app.route('/addnew', methods=['GET', 'POST'])
 def add_new_page():
-    return render_template('addnew.html',
-            **get_shared_kw(),
-            )
+
+    if request.method == 'GET':
+        return render_template('addnew.html',
+                **get_shared_kw())
+
+    elif request.method == 'POST':
+        print(requests.form['textbox1'])
+        return redirect(url_for('main_page'))
 
 @app.route('/log')
 def log_page():
