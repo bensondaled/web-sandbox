@@ -1,9 +1,10 @@
 .pagetitle {
    position: fixed;
-   top:5px;
+   top:10px;
    right:10px;
    font-size: 250%;
    color: #47476b;
+   font-family: sans-serif;
 }
 
 
