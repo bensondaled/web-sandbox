@@ -27,7 +27,7 @@ SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostnam
 app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db = SQLAlchemy(app)
+db = SQLAlchemy(app) # to make this db: in ipython3.7 console: from website import db; db.create_all()
 
 class MyItem(db.Model):
     __tablename__ = "log"
@@ -65,11 +65,15 @@ def add_new_page():
 
     elif request.method == 'POST':
         data_in = request.form['textbox1']
+        data_in = MyItem(content=data_in)
+        db.session.add(data_in)
+        db.session.commit()
         return redirect(url_for('main_page'))
 
 @app.route('/log')
 def log_page():
     return render_template('log.html',
+            data=MyItem.query.all(),
             **get_shared_kw(),
             )
 

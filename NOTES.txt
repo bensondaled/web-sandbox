@@ -11,3 +11,5 @@ flask
 jinja
     https://codeburst.io/jinja-2-explained-in-5-minutes-88548486834e
     https://jinja.palletsprojects.com/en/2.11.x/templates/
+sql etc
+    https://blog.pythonanywhere.com/121/
