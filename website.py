@@ -4,6 +4,9 @@ locally, can either run this file (b/c of the app.run call in main), or:
 
 in browser:
     right click > inspect - click network tab - check "Disable cache"
+    
+logging:
+    app.logger.info('')
 """
 
 import os
@@ -25,7 +28,7 @@ def get_shared_kw():
                   
     return dict(menu_options=menu_options)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def main_page():
     
     return render_template('home.html',
@@ -34,13 +37,13 @@ def main_page():
 
 @app.route('/addnew', methods=['GET', 'POST'])
 def add_new_page():
-
+    
     if request.method == 'GET':
         return render_template('addnew.html',
                 **get_shared_kw())
 
     elif request.method == 'POST':
-        print(requests.form['textbox1'])
+        data_in = request.form['textbox1']
         return redirect(url_for('main_page'))
 
 @app.route('/log')
