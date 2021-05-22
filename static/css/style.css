@@ -1,3 +1,12 @@
+.pagetitle {
+   position: fixed;
+   top:5px;
+   right:10px;
+   font-size: 250%;
+   color: #47476b;
+}
+
+
 /* The side navigation menu */
 .sidenav {
   height: 100%; /* 100% Full-height */
