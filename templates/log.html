@@ -10,7 +10,7 @@
     
     This is the log page.
     <ul>
-        {% for item in data %}
+        {% for item in data[::-1] %}
             <li>{{item.content}}</li>
         {% endfor %}
     </ul>
