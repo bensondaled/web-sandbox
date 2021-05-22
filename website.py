@@ -51,26 +51,25 @@ def get_shared_kw():
                   
     return dict(menu_options=menu_options)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def main_page():
-    
     return render_template('home.html',
             **get_shared_kw(),
             )
 
-@app.route('/addnew', methods=['GET', 'POST'])
+@app.route('/addnew', methods=['GET'])
 def add_new_page():
-    
     if request.method == 'GET':
         return render_template('addnew.html',
                 **get_shared_kw())
-
-    elif request.method == 'POST':
-        data_in = request.form['textbox1']
-        data_in = MyItem(content=data_in)
-        db.session.add(data_in)
-        db.session.commit()
-        return redirect(url_for('log_page'))
+    
+@app.route('/addnew_', methods=['POST'])
+def add_new():
+    data_in = request.form['textbox1']
+    data_in = MyItem(content=data_in)
+    db.session.add(data_in)
+    db.session.commit()
+    return redirect(url_for('log_page'))
 
 @app.route('/log')
 def log_page():
