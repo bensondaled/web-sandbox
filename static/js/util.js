@@ -35,7 +35,11 @@ class Sidebar {
         closeX.innerHTML = "&times;";
         menuDiv.appendChild(closeX);
         
-        // hamburger button
+        // hamburger button, first make space bc fixed burger won't act as if it occupies space (due to position:fixed)
+        var topDiv = document.createElement("div");
+        topDiv.className = 'toppad';
+        document.body.appendChild(topDiv);
+
         var menuBut = document.createElement("input");
         menuBut.setAttribute("type", "image");
         var imgUrl = "/static/images/hamburger.png"; //"{{ url_for('static', filename='images/hamburger.png') }}";

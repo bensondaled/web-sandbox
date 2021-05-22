@@ -1,5 +1,9 @@
 body {background-color: #e6f7ff;}
 
+.toppad{
+    margin-bottom: 24mm;
+}
+
 .pagetitle {
    position: fixed;
    top:10px;
@@ -84,6 +88,9 @@ button, input, select, textarea {
   width: 20mm;
   height: 15mm;
   margin-bottom: 5%;
+  position: fixed;
+  top:5px;
+  left:5px;
 }
 
 /* Position and style the close button (top right corner) */
