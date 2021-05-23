@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='js/util.js') }}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 </head>
 
 <body onload="setday()">
@@ -19,7 +20,6 @@
     <div class="pagetitle"> add new </div>
     
    <div class="allcent">
-       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
        <form id="formin" action="{{url_for('add_new')}}" method="POST">
 
         <button class="daybuts" type="button" onclick="setday(-1)">yest</button>
@@ -39,7 +39,6 @@
         <input class="formin" type="submit" value="Submit">
 
     </form>
-       </meta>
     </div> 
 
 </body>

@@ -6,7 +6,7 @@ body {background-color: #e6f7ff;}
 
 .pagetitle {
    position: fixed;
-   top:10px;
+   top:0px;
    right:10px;
    font-size: 250%;
    color: #47476b;
@@ -85,8 +85,8 @@ button, input, select, textarea {
 }
 
 .hamburger{
-  width: 20mm;
-  height: 15mm;
+  width: 14mm;
+  height: 9mm;
   margin-bottom: 5%;
   position: fixed;
   top:5px;
