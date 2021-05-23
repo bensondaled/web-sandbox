@@ -44,10 +44,10 @@ def get_data_path(filename, data_dir='data'):
     return file_path, url
 
 def get_shared_kw():
-    menu_options={'Home': url_for('main_page'),
-                  'Add new': url_for('add_new_page'),
-                  'Log': url_for('log_page'),
-                  'Plots': url_for('plots_page')}
+    menu_options={'home': url_for('main_page'),
+                  'add new': url_for('add_new_page'),
+                  'log': url_for('log_page'),
+                  'plots': url_for('plots_page')}
                   
     return dict(menu_options=menu_options)
 
