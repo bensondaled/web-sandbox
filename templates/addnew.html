@@ -15,6 +15,35 @@
             d.setDate(d.getDate() + inc);
             document.getElementById('datepicker').valueAsDate = d;
         }
+
+        function toggleSex(){
+            var e = document.getElementById('sexpicker');
+            var es = document.getElementById('sexsetter');
+            var curval = e.textContent || e.innerText;
+            if (curval == 'M'){
+                e.style.background = '#eb79fc';
+                e.textContent = 'F';
+                es.value = 'F';
+            }
+            else if (curval == 'F'){
+                e.style.background = '#0394fc';
+                e.textContent = 'M';
+                es.value = 'M';
+            }
+        }
+
+        function pickAge(obj, a){
+            var e = document.getElementById('agepicker');
+            e.value = a;
+
+            for (const o of ['agebut0', 'agebut1', 'agebut2']){
+                console.log(o);
+                var ob = document.getElementById(o);
+                ob.style.background = '#c2c2c2';
+            }
+
+            obj.style.background = '#6e6e6e';
+        }
     </script>
     
     <div class="pagetitle"> add new </div>
@@ -25,18 +54,23 @@
         <button class="daybuts" type="button" onclick="setday(-1)">yest</button>
         <button class="daybuts" type="button" onclick="setday(0)">today</button>
         <button class="daybuts" type="button" onclick="setday(1)">tmrw</button>
+
         <input class="formin" type="date" name="date" id="datepicker" value="2021-07-01">
 
-        <!--label for="pid">Patient ID</label-->
-        <input class="formin" type="text" id="patient_id" name="patient_id" placeholder="patient id ...">
-        
-        <input class="formin" type="text" name="diagnosis" placeholder="diagnosis ...">
-        
-        <input class="formin" type="text" name="procedures" placeholder="procedures ...">
+        <input class="formin_share" type="text" id="patient_id" name="pid" placeholder="id" maxlength="100">
+        <button class="sexbut" type="button" id="sexpicker" onclick="toggleSex()">M</button>
 
-        <textarea class="formin" name="comment" rows=4 placeholder="comment ..."></textarea>
+        <button class="agebut" type="button" id="agebut0" onclick="pickAge(this, '<18')"><18</button>
+        <button class="agebut" type="button" id="agebut1" onclick="pickAge(this, '18-60')">18-60</button>
+        <button class="agebut" type="button" id="agebut2" onclick="pickAge(this, '>60')">>60</button>
 
+        <input class="formin" type="text" name="diagnosis" placeholder="diagnoses" maxlength="2000">
+        <input class="formin" type="text" name="procedures" placeholder="procedures" maxlength="2000">
+        <textarea class="formin" name="comment" rows=4 placeholder="comments"></textarea>
         <input class="formin" type="submit" value="Submit">
+        <input class="formhide" type="text" id="agepicker" name="age", value="unselected">
+        <input class="formhide" type="text" id="sexsetter" name="sex", value="M">
+
 
     </form>
     </div> 

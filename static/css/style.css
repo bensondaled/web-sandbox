@@ -38,11 +38,24 @@ button, input, select, textarea {
   -webkit-appearance: textfield;
   text-align: center;
 }
+.formin_share {
+  align: center;
+  width: 2cm%;
+  font-size: 110%;
+  padding: 6px 0px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  -webkit-appearance: textfield;
+  text-align: center;
+}
 .daybuts {
   align: center;
   font-size: 100%;
   font-family: sans-serif;
-  width: 25%;
+  width: 3cm;
   padding: 0px 0px;
   margin-top: 0;
   margin-bottom: 2px;
@@ -50,7 +63,41 @@ button, input, select, textarea {
   margin-right: auto;
   box-sizing: border-box;
 }
+.sexbut {
+  align: center;
+  font-size: 100%;
+  font-family: sans-serif;
+  width: 1cm;
+  padding: 10px 0px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  margin-left: 1%;
+  margin-right: 1%;
+  box-sizing: border-box;
+  background-color: #0394fc;
+  font-weight: bold;
+  border: none;
+}
 
+.formhide {
+    visibility: hidden;
+}
+.agebut {
+  align: center;
+  font-size: 80%;
+  font-family: sans-serif;
+  width: 1cm;
+  padding: 12px 0px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  border-width: 0;
+  font-weight: bold;
+  border: none;
+  background-color: #c2c2c2;
+}
 
 
 /* The side navigation menu */
@@ -116,3 +163,59 @@ button, input, select, textarea {
   .sidenav a {font-size: 18px;}
 }
 */
+
+.logtable{
+    border-collapse: collapse;
+    margin: 55px 0;
+	margin-left: auto;
+	margin-right: auto;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 100%;
+    max-width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.logtable thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+    table-layout: fixed;
+}
+.logtable th,
+.logtable td {
+    padding: 12px 20px;
+    word-wrap:break-word;
+}
+.logtable tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+/*
+.logtable tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.logtable tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+*/
+.logtable tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+.logtable tr:hover { background: yellow; }
+
+.delbut {
+  align: center;
+  font-size: 100%;
+  font-family: sans-serif;
+  width: 0.7cm;
+  padding: 0px 0px;
+  margin-top: 0;
+  margin-bottom: 2px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  color: red;
+}

@@ -8,9 +8,11 @@ class Plot {
         this.yvar = opts.yvar;
 
         this.labelSize = 25;
-        this.svg_margin = {top: 5, bottom: 200, left: 5, right: 50}; // of svg canvas on page
+        this.svg_margin = {top: 5, bottom: 200, left: 50, right: 50}; // of svg canvas on page
         this.margin = {top: 100, bottom: 100, left: 100, right: 50}; // of plot within the svg
 
+        // runtime
+        this.zoomMode = [false, false]; // x, y
     }
 
     setup() {
@@ -24,8 +26,8 @@ class Plot {
             g = d.getElementsByTagName('body')[0],
             x = w.innerWidth || e.clientWidth || g.clientWidth,
             y = w.innerHeight|| e.clientHeight|| g.clientHeight,
-            svg_dims = {width: x - this.svg_margin.right,
-                        height: y - this.svg_margin.bottom};
+            svg_dims = {width: x - this.svg_margin.right - this.svg_margin.left,
+                        height: y - this.svg_margin.bottom - this.svg_margin.top};
         this.dims = {width: svg_dims.width
                             - this.margin.left
                             - this.margin.right,
@@ -40,10 +42,33 @@ class Plot {
             .attr("transform", "translate(" + this.svg_margin.left + "," + this.svg_margin.top + ")")
             .call(d3.zoom().on('zoom', this.onZoom.bind(this)));
 
+        // to use x/y keys for x/y zoom
+        d3.select('body').on('keydown', function(){
+            switch (d3.event.key){
+                case "y":
+                    this.zoomMode[1] = true;
+                    break;
+                case "x":
+                    this.zoomMode[0] = true;
+                    break;
+            }
+        }.bind(this));
+        d3.select('body').on('keyup', function(){
+            switch (d3.event.key){
+                case "y":
+                    this.zoomMode[1] = false;
+                    break;
+                case "x":
+                    this.zoomMode[0] = false;
+                    break;
+            }
+        }.bind(this));
+
         this.svg.append("rect")
             .attr("width", "100%")
             .attr("height", "100%")
-            .attr("fill", 'lightgrey');
+            .attr("fill", 'lightgrey') // useful for debugging position
+            .style("opacity", 0.01);
 
         this.axes = this.svg.append('g')
             .attr('width', this.dims.width)
@@ -52,7 +77,8 @@ class Plot {
         this.axes.append("rect")
             .attr("width", this.dims.width)
             .attr("height", this.dims.height)
-            .attr("fill", 'white');
+            .attr("fill", 'white')
+            .style("opacity", 0);
 
         var clip = this.axes.append("defs").append("svg:clipPath")
             .attr("id", "clip")
@@ -62,6 +88,7 @@ class Plot {
             .attr("y", "0")
             .attr('width', this.dims.width)
             .attr('height', this.dims.height);
+
     }
 
     createScales() {
@@ -75,8 +102,8 @@ class Plot {
 
         const yExtent = d3.extent(this.data, d => parseInt(d[this.yvar]));
         // pad y axis values
-        yExtent[0] = yExtent[0] - 1000;
-        yExtent[1] = yExtent[1] + 1000;
+        yExtent[0] = yExtent[0] - 1;
+        yExtent[1] = yExtent[1] + 1;
         // force zero baseline if all data points are positive
         //if (yExtent[0] > 0) { yExtent[0] = 0; };
 
@@ -149,34 +176,48 @@ class Plot {
     }
 
     onZoom() {
-           var new_x_scale = d3.event.transform.rescaleX(this.x_scale);
-           var new_y_scale = d3.event.transform.rescaleY(this.y_scale);
-            
-           this.x_axis.transition()
-             .duration(0)
-             .call(this.xAxis.scale(new_x_scale));
 
-           this.y_axis.transition()
-             .duration(0)
-             .call(this.yAxis.scale(new_y_scale));
-           
-         
-          var xvar = this.xvar;
-          var yvar = this.yvar;
-          this.scatter
-             .attr("cx", function(d)
-                          { return new_x_scale(this.parseDate(d[xvar])); }
-                      .bind(this))
-             .attr("cy", function(d) {
-                           return new_y_scale(d[yvar])
-                         });
+        var zoomX = this.zoomMode[0]==true | this.zoomMode[1]==false;
+        var zoomY = this.zoomMode[1]==true | this.zoomMode[0]==false;
 
-          this.line
-            .attr("d", d3.line()
-                   .x(function (d) { return new_x_scale(this.parseDate(d[xvar])); }
-                     .bind(this))
-                   .y(function(d) { return new_y_scale(d[yvar]); })
-                 )
+        var trans = d3.event.transform;
+        var new_x_scale = trans.rescaleX(this.x_scale);
+        var new_y_scale = trans.rescaleY(this.y_scale);
+
+        if (zoomX){
+           var use_x_scale = new_x_scale;
+        }
+        else{
+           var use_x_scale = this.x_scale;
+        }
+        if (zoomY){
+           var use_y_scale = new_y_scale;
+        }
+        else{
+           var use_y_scale = this.y_scale;
+        }
+
+        var xvar = this.xvar;
+        var yvar = this.yvar;
+
+        this.x_axis.transition()
+         .duration(0)
+         .call(this.xAxis.scale(use_x_scale));
+
+        this.y_axis.transition()
+         .duration(0)
+         .call(this.yAxis.scale(use_y_scale));
+
+
+        this.scatter
+         .attr("cx", function(d){ return use_x_scale(this.parseDate(d[xvar])); }.bind(this))
+         .attr("cy", function(d) { return use_y_scale(d[yvar])});
+
+        this.line
+        .attr("d", d3.line()
+        .x(function (d) { return use_x_scale(this.parseDate(d[xvar]));}.bind(this))
+        .y(function(d) { return use_y_scale(d[yvar]); }.bind(this)));
+
      }
 
     refresh(){
@@ -189,7 +230,6 @@ class Plot {
 
     setData(newData) {
         this.data = newData;
-
         this.refresh();
         
     }

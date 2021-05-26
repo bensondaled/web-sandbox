@@ -15,15 +15,16 @@
     <div class="pagetitle"> plots </div>
 
     <!-- plots -->
-    <div id="div_2016"></div>
+    <div id="div_main"></div>
+
     <script lang="javascript">
-        tmp = '2016'
+        yvar = '{{yvar}}'
 
         const plot = new Plot({
-            element: document.querySelector(`#div_${tmp}`),
+            element: document.querySelector('#div_main'),
             data: null,
-            xvar: `date`,
-            yvar: `${tmp}`
+            xvar: 'date',
+            yvar: `${yvar}`
         });
 
         d3.csv('{{data_url}}', function(csv_data) {

@@ -4,15 +4,44 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='js/util.js') }}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <script lang="javascript">
+        function delRow(idx) {
+            document.getElementById('rowid').value = idx;
+            document.getElementById('del_form').submit();
+        }
+    </script>
 </head>
 
 <body>
     <script lang="javascript">const sidebar = new Sidebar({menu_options: {{menu_options|safe}}});</script>
     
     <div class="pagetitle"> log </div>
-    <ul>
-        {% for item in data[::-1] %}
-            <li>{{item.content}}</li>
+
+    <form id="del_form" action="{{url_for('delete_log_row')}}" method="POST">
+      <input type="hidden" name="rowid" id='rowid' value="" />
+    </form>
+    {{table}}
+
+
+	<table class="logtable">
+		<thead><tr>
+        {% for field in fields %}
+			<th>{{field}}</th>
         {% endfor %}
-    </ul>
+        <th>delete</th>
+		</tr></thead>
+
+		<tbody>
+        {% for row in rows %}
+		<tr>
+			{% for field in fields %}
+				<td>{{row[field]}}</td>
+			{% endfor %}
+            <td><button class="delbut" type="button" onclick="delRow({{row['id']}})">X</button></td>
+		</tr>
+        {% endfor %}
+		</tbody>
+	</table>	
+
 </body>
